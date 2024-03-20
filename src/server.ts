@@ -1,3 +1,6 @@
-const server = (): string => 'Hello World'
+import App from '@/core/App'
+
+const server = new App()
+server.listen()
 
 export default server
