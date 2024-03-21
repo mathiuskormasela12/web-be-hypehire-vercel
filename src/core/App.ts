@@ -49,7 +49,7 @@ class App {
     const orderRouter = new OrderRouter()
 
     this.app.use('/api/v1/auth', authRouter.router)
-    this.app.use('/api/v1/book', bookRouter.router)
+    this.app.use('/api/v1/books', bookRouter.router)
     this.app.use('/api/v1/order', orderRouter.router)
   }
 

@@ -20,6 +20,12 @@ class OrderController {
     const result = await orderService.getOrders()
     response(res, result)
   }
+
+  public static async payBook (req: Request, res: Response): Promise<void> {
+    const orderService = new OrderService(req)
+    const result = await orderService.payBook()
+    response(res, result)
+  }
 }
 
 export default OrderController

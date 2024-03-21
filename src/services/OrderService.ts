@@ -1,3 +1,4 @@
+import Config from '@/config'
 import ORDER_STATUS from '@/constants/ORDER_STATUS'
 import Service from '@/core/Service'
 import { type IResponseWithParams, type IResponse } from '@/interfaces/IResponse'
@@ -17,7 +18,7 @@ class OrderService extends Service {
           await this.prisma.order.create({
             data: {
               status: ORDER_STATUS.PENDING,
-              userId: this.body.userId,
+              userId: this.locals.decoded.code,
               bookId: this.body.bookId
             }
           })
@@ -85,6 +86,43 @@ class OrderService extends Service {
     }
   }
 
+  public async payBook (): Promise<IResponse> {
+    try {
+      const order = await this.prisma.order.findUnique({
+        where: {
+          id: this.params.id
+        }
+      })
+
+      if (order) {
+        await this.prisma.order.update({
+          where: {
+            id: this.params.id
+          },
+          data: {
+            status: ORDER_STATUS.SUCCESS
+          }
+        })
+
+        return {
+          statusCode: 200,
+          message: 'Payment successfully'
+        }
+      } else {
+        return {
+          statusCode: 400,
+          message: 'Your order is not found'
+        }
+      }
+    } catch (err) {
+      const { message } = err as Error
+      return {
+        statusCode: 500,
+        errors: [message]
+      }
+    }
+  }
+
   public async getOrders (): Promise<IResponseWithParams<Order[]>> {
     try {
       const orders = await this.prisma.order.findMany({
@@ -107,7 +145,13 @@ class OrderService extends Service {
 
       return {
         statusCode: 200,
-        data: orders
+        data: orders.map(order => ({
+          ...order,
+          book: {
+            ...order.book,
+            image: `${Config.APP_URL}/static/${order.book.image}`
+          }
+        }))
       }
     } catch (err) {
       const { message } = err as Error

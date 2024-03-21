@@ -58,13 +58,13 @@ export const isLoginMiddleware = (req: Request, res: Response, next: NextFunctio
     } catch (err) {
       const { message } = err as Error
       response(res, {
-        statusCode: 500,
+        statusCode: 403,
         errors: [message]
       })
     }
   } else {
     response(res, {
-      statusCode: 401,
+      statusCode: 400,
       errors: ['Forbidden']
     })
   }

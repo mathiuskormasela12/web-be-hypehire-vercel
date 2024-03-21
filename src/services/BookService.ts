@@ -4,6 +4,7 @@ import Service from '@/core/Service'
 import uploadFile from '@/helpers/uploadFile'
 import { type IResponseWithParams, type IResponse } from '@/interfaces/IResponse'
 import { type Book } from '@prisma/client'
+import Config from '@/config'
 
 class BookService extends Service {
   public async createBook (): Promise<IResponse> {
@@ -131,6 +132,11 @@ class BookService extends Service {
   public async getBooks (): Promise<IResponseWithParams<Book[]>> {
     try {
       const books = await this.prisma.book.findMany({
+        where: {
+          title: {
+            contains: this.query.keyword as string
+          }
+        },
         include: {
           bookTag: {
             include: {
@@ -142,7 +148,10 @@ class BookService extends Service {
 
       return {
         statusCode: 200,
-        data: books
+        data: books.map(item => ({
+          ...item,
+          image: `${Config.APP_URL}/static/${item.image}`
+        }))
       }
     } catch (err) {
       const { message } = err as Error
