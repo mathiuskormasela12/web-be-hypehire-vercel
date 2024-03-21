@@ -8,6 +8,7 @@ import Config from '@/config'
 import AuthRouter from '@/routers/AuthRouter'
 import logger from '@/helpers/logger'
 import BookRouter from '@/routers/BookRouter'
+import OrderRouter from '@/routers/OrderRouter'
 
 class App {
   private readonly app: Application
@@ -45,9 +46,11 @@ class App {
 
     const authRouter = new AuthRouter()
     const bookRouter = new BookRouter()
+    const orderRouter = new OrderRouter()
 
     this.app.use('/api/v1/auth', authRouter.router)
     this.app.use('/api/v1/book', bookRouter.router)
+    this.app.use('/api/v1/order', orderRouter.router)
   }
 
   public listen (): void {
