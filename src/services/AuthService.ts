@@ -32,7 +32,7 @@ class AuthService extends Service {
         return {
           statusCode: 400,
           message: 'Register failed',
-          errors: ['user does not exist']
+          errors: ['user already exist']
         }
       }
     } catch (err) {

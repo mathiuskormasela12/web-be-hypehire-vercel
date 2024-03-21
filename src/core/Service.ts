@@ -7,6 +7,7 @@ abstract class Service {
   protected readonly query: Request['query']
   protected readonly headers: Request['headers']
   protected readonly locals: Request['app']['locals']
+  protected readonly files: Request['files']
   protected readonly prisma: PrismaClient
 
   constructor (req: Request) {
@@ -15,6 +16,7 @@ abstract class Service {
     this.query = req.query
     this.headers = req.headers
     this.locals = req?.app?.locals
+    this.files = req.files
     this.prisma = new PrismaClient()
   }
 }
