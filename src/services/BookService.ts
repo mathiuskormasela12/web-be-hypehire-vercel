@@ -15,7 +15,7 @@ class BookService extends Service {
         const [books, tags] = await Promise.all([
           this.prisma.book.findMany({
             where: {
-              title: this.body.title
+              title: String(this.body.title).toLowerCase()
             }
           }),
           this.prisma.tag.findMany({
@@ -28,7 +28,7 @@ class BookService extends Service {
         if (books.length === 0 && tags.length > 0) {
           const result = await this.prisma.book.create({
             data: {
-              title: this.body.title,
+              title: String(this.body.title).toLowerCase(),
               writer: this.body.writer,
               price: Number(this.body.price),
               image: photo
