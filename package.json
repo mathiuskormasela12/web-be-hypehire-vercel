@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon ./src/server.ts",
     "build": "tspc -p tsconfig.build.json",
-    "start:prod": "node ./dist/server.js",
+    "start:prod": "node ./api/server.js",
     "test": "jest",
     "prisma:studio": "npx prisma studio",
     "prisma:migrate": "npx prisma migrate dev"
